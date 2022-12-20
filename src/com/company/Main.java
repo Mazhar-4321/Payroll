@@ -1,6 +1,7 @@
 package com.company;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -15,12 +16,30 @@ public class Main {
     private List<EmployeePayroll> payrollList = new ArrayList<>();
     private Scanner scanner = new Scanner(System.in);
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         System.out.println("Welcome to Employment Payroll Programme");
         Main main = new Main();
         main.readPayrollData();
         main.checkIfFileExists(fileName);
         main.deleteFile(fileName);
+        main.readPayrollDataUsingFile();
+    }
+
+    private void readPayrollDataUsingFile() throws FileNotFoundException {
+        File myObj = new File("D:\\FileOperations\\src\\resources\\payroll.txt");
+        Scanner myReader = new Scanner(myObj);
+        int count = 0;
+        while (myReader.hasNextLine()) {
+            String data = myReader.nextLine();
+            String[] userArray = data.split(",");
+            String id = userArray[0];
+            String name = userArray[1];
+            String salary = userArray[2];
+            System.out.println(id + "," + name + "," + salary);
+            count++;
+        }
+        System.out.println(count==2);
+        myReader.close();
     }
 
     private void deleteFile(String fileName) {
@@ -50,7 +69,7 @@ public class Main {
     private void addDataToFile() {
         File file = new File("D:\\FileOperations\\src\\resources\\payroll.txt");
         FileWriter fr = null;
-        for(int i=0;i<payrollList.size();i++) {
+        for (int i = 0; i < payrollList.size(); i++) {
             String text = payrollList.get(i).getId() + "," + payrollList.get(i).getName() + "," + payrollList.get(i).getSalary();
             try {
                 fr = new FileWriter(file, true);
