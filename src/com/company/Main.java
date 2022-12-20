@@ -1,6 +1,8 @@
 package com.company;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -42,6 +44,28 @@ public class Main {
 
     private void writePayrollData() {
         System.out.println(payrollList);
+        addDataToFile();
+    }
+
+    private void addDataToFile() {
+        File file = new File("D:\\FileOperations\\src\\resources\\payroll.txt");
+        FileWriter fr = null;
+        for(int i=0;i<payrollList.size();i++) {
+            String text = payrollList.get(i).getId() + "," + payrollList.get(i).getName() + "," + payrollList.get(i).getSalary();
+            try {
+                fr = new FileWriter(file, true);
+                fr.write(text);
+                fr.write("\r\n");
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    fr.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     private boolean checkIfFileExists(String path) {
